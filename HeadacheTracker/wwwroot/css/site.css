@@ -1,0 +1,355 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.navbar-brand, .navbar-brand:hover {
+    color: #F3DADF;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html, body {
+    -webkit-overflow-scrolling: touch; /* umožní plynulé scrollování na iOS */
+
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /*background-color: #413B61;*/ /* Nastaví tmavou barvu jako výchozí pozadí */
+    background-color: #f0f0f0; 
+
+
+    background-image: linear-gradient(to right, #413B61, #AE7DAC);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    color: #F3DADF;
+}
+
+body {
+    min-height: 100vh;
+    overflow-y: scroll;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/*html {
+    background-image: linear-gradient(to right, #413B61, #AE7DAC);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    min-height: 100vh;
+    color: #F3DADF;
+    background: transparent;*/ /* aby bylo vidìt pozadí html */
+/*overflow-x: hidden;
+}*/
+
+
+/*html {
+    margin: 0;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;*/
+/*    padding: 0;*/
+/*background-color: #f0f0f0;*/ /* barva pozadí stránky */
+/*background-image: linear-gradient(to right, #413B61, #AE7DAC);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;*/ /* nebo contain, podle potøeby */
+
+/*height: 100%;*/
+/*    padding-top: env(safe-area-inset-top);*/
+/* safe area padding */
+/*padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    color: #F3DADF;
+    overflow-x: hidden;
+}*/
+.nav-link {
+    color: #F3DADF;
+}
+
+    .nav-link:hover {
+        color: #F3DADF;
+    }
+
+/* CONTAINERY ------------------------------------------------------------------------------------- */
+.container-mine-transparent-pink {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: white;
+}
+
+.container-mine-transparent-pink-75 {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: white;
+    min-height: 50vh;
+}
+
+.container-mine-pink {
+    background: linear-gradient(135deg, rgba(174, 125, 172, 0.6), rgba(174, 125, 172, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 0px;
+    color: white;
+}
+
+.alert-mine-orange {
+    background: linear-gradient(135deg, rgba(241, 145, 109, 0.25), rgba(241, 145, 109, 0.15));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 16px 24px;
+    color: white;
+}
+
+
+/* BUTTONY ------------------------------------------------------------------------------------- */
+.btn-mine-primary {
+    background-color: rgba(241, 145, 109);
+    color: #F3DADF;
+    border: 1px solid rgba(243, 218, 223, 0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .btn-mine-primary:hover,
+    .btn-mine-pink:hover {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+.btn-mine-secondary {
+    background-color: rgba(130, 112, 180, 0.2);
+    color: #E7DFF7;
+    border: 1px solid rgba(231, 223, 247, 0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .btn-mine-secondary:hover {
+        background: rgba(231, 223, 247, 0.25);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+.btn-mine-pink {
+    background-color: rgb(174, 125, 172);
+    color: #F3DADF;
+    border: 1px solid rgba(243, 218, 223, 0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+/*POUŽÍVÁM - IKONKY*/
+.btn-mine-transparent {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: #F3DADF;
+}
+
+    .btn-mine-transparent:hover {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        color: #F1916D;
+    }
+
+.btn-mine-secondary-borderless {
+    background-color: transparent;
+    color: #F1916D; /*oranžová*/
+}
+
+    .btn-mine-secondary-borderless:hover {
+        background-color: transparent;
+        color: #F3DADF;
+    }
+
+    .btn-mine-primary:focus,
+    .btn-mine-secondary:focus,
+    .btn-mine-pink:focus,
+    .btn-mine-secondary-borderless:focus,
+    .btn-mine-primary:focus-visible
+    .btn-mine-secondary:focus-visible,
+    .btn-mine-pink:focus-visible,
+    .btn-mine-secondary-borderless:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+
+/* RANGE ------------------------------------------------------------------------------------- */
+/*BS pro zmìnu kulièky u range*/
+input[type="range"]::-webkit-slider-thumb {
+    background-color: #F1916D;
+}
+
+input[type="range"]::-moz-range-thumb {
+    background-color: #ff5733;
+}
+
+input[type="range"]::-ms-thumb {
+    background-color: #ff5733;
+}
+
+/* Styl èárky (track) */
+input[type="range"]::-webkit-slider-runnable-track {
+    background-color: #F3DADF;
+    height: 6px;
+    border-radius: 3px;
+}
+
+input[type="range"]::-moz-range-track {
+    background-color: #F3DADF;
+    height: 6px;
+    border-radius: 3px;
+}
+
+input[type="range"]::-ms-track {
+    background-color: transparent;
+    border-color: transparent;
+    color: transparent;
+    height: 6px;
+}
+
+input[type="range"]::-ms-fill-lower {
+    background-color: #F3DADF;
+    border-radius: 3px;
+}
+
+input[type="range"]::-ms-fill-upper {
+    background-color: #F3DADF;
+    border-radius: 3px;
+}
+
+/* INPUT, SELECT ------------------------------------------------------------------------------------- */
+textarea.form-control,
+input.form-control,
+select.form-control,
+input.form-control:focus,
+select.form-control:focus,
+input.form-control:valid,
+select.form-control:valid,
+input.form-control:not(:placeholder-shown) {
+    background-color: #F3DADF !important;
+    box-shadow: none !important;
+    border-color: #F3DADF !important;
+    color: black !important;
+}
+
+    input.form-control:-webkit-autofill,
+    select.form-control:-webkit-autofill {
+        background-color: #F3DADF !important;
+        -webkit-box-shadow: 0 0 0px 1000px #F3DADF inset !important;
+        -webkit-text-fill-color: black !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+
+/* DALŠÍ ------------------------------------------------------------------------------------- */
+.accordion-item {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.accordion-button-mine,
+.accordion-button {
+    background-color: transparent !important;
+    color: #F3DADF;
+    box-shadow: none;
+    border: none;
+}
+
+    .accordion-button-mine:hover,
+    .accordion-button:hover {
+        background-color: transparent !important;
+        color: #F3DADF;
+    }
+
+    .accordion-button-mine:not(.collapsed) {
+        background-color: transparent !important;
+        color: #F3DADF;
+        box-shadow: none;
+    }
+
+    /* Fokus */
+    .accordion-button-mine:focus,
+    .accordion-button-mine:focus-visible {
+        background-color: transparent !important;
+        color: #F3DADF;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+canvas {
+    background-color: transparent;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+h2.text-mine-pink {
+    color: #AE7DAC;
+}
+
+.text-mine-orange {
+    color: #F1916D;
+}
+
+.input-group-text {
+    background-color: #F3DADF;
+}

@@ -1,0 +1,47 @@
+﻿@model TreatmentDTO
+
+<div class="container mt-5">
+	<div class="row justify-content-center g-4">
+		<div class="col-12 col-md-6 col-xl-4">
+			<a class="btn btn-lg mb-5 p-0 fw-bold btn-mine-secondary-borderless" asp-controller="Home" asp-action="Index">
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+					<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+				</svg>
+			</a>
+			<h2 class="fs-1">Co ti pomáhá?</h2>
+			<h6 class="mb-5 fw-light fs-5">Co ti pomáhá, když je ti nejhůř? Procházka, ticho, meditace nebo třeba pohyb? Vysleduj, na jakého "pomocníka" se můžeš vždy spolehnout.</h6>
+		</div>
+		<div class="col-12 col-md-6 col-xl-4 ">
+
+			<div class="container-mine-transparent-pink">
+				<div class="row justify-content-end">
+					<div class="col-auto">
+						<a class="btn btn-lg btn-mine-transparent p-0 m-0" asp-controller="Treatments" asp-action="Index">
+							<svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+								<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+							</svg>
+						</a>
+					</div>
+				</div>
+				<div class="row">
+					<form asp-action="Edit" method="post">
+						<div class="form-group">
+							<label asp-for="Name" class="form-label">Název</label>
+							<input asp-for="Name" class="form-control" />
+							<span asp-validation-for="Name" class="text-warning"></span>
+						</div>
+						<div class="mt-3">
+							<input class="btn btn-mine-primary" type="submit" value="Uložit změnu" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}

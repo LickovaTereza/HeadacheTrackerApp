@@ -1,0 +1,148 @@
+﻿@model HeadacheRecordDTO
+
+@{
+	ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-lg-8 col-xl-6">
+			<a class="btn btn-lg  mb-5 p-0 fw-bold btn-mine-secondary-borderless" asp-controller="Home" asp-action="Index">
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+					<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+				</svg>
+			</a>
+			<h2 class="display-5 fw-light mt-2">Nový záznam</h2>
+			<form method="post" class="container-mine-transparent-pink " asp-action="Create">
+
+				@*Datum záznamu*@
+				<div class="col">
+					<div class="mb-3 row">
+						<label asp-for="Date" class="col-form-label col-12 col-md-2">Datum</label>
+						<div class="col-12 col-md-4">
+							<input asp-for="Date" type="date" class="form-control" id="Date" name="Date" max="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+							<span asp-validation-for="Date" class="text-warning"></span>
+						</div>
+					</div>
+				</div>
+
+				@*Délka bolesti*@
+				<div class="col">
+					<div class="row mb-3">
+						<label asp-for="Duration" class="form-label col-12 col-md-2">Trvání</label>
+						<div class="col-12 col-md-4">
+							<div class="input-group">
+								<input asp-for="Duration" type="number" class="form-control" min="0" step="5">
+								<span class="input-group-text">min</span>
+							</div>
+							<span asp-validation-for="Duration" class="text-warning"></span>
+						</div>
+					</div>
+				</div>
+
+				@*Intenzita*@
+				<div class="row mb-3">
+					<label asp-for="Intensity" class="col-form-label col-12 col-md-2">Intenzita</label>
+					<div class="col">
+						<input asp-for="Intensity" type="range" class="form-range" min="1" max="5" step="1" id="Intensity" name="Intensity" />
+						<div class="d-flex justify-content-between px-1">
+							<span class="small ">1</span>
+							<span class="small ">2</span>
+							<span class="small">3</span>
+							<span class="small">4</span>
+							<span class="small">5</span>
+						</div>
+					</div>
+				</div>
+				<hr />
+
+				@*Spouštěče*@
+				<div class="row mb-3 align-items-center">
+					<label asp-for="TriggerId" class="form-label col-12 col-md-2">Spouštěč</label>
+					<div class="col">
+						<select asp-for="TriggerId" class="form-control" asp-items="ViewBag.Triggers">
+							<option value=""></option>
+
+						</select>
+					</div>
+					<div class="col-auto">
+						<button type="submit"
+								formaction="@Url.Action("RedirectToCreateTrigger", "HeadacheRecords")"
+								formmethod="post"
+								formnovalidate
+								class="btn btn-mine-pink">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+							</svg>
+						</button>
+					</div>
+				</div>
+				<hr />
+
+				@*Medications*@
+				<div class="row mb-3">
+					<label asp-for="MedicationId" class="form-label col-12 col-md-2">Medikace</label>
+					<div class="col">
+						<select asp-for="MedicationId" class="form-control" asp-items="ViewBag.Medications">
+							<option value=""></option>
+						</select>
+					</div>
+					<div class="col-auto">
+						<button type="submit"
+								formaction="@Url.Action("RedirectToCreateMedication", "HeadacheRecords")"
+								formmethod="post"
+								formnovalidate
+								class="btn btn-mine-pink">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+							</svg>
+						</button>
+					</div>
+				</div>
+
+				@*Pomocníci*@
+				<div class="row mb-3">
+					<label asp-for="TreatmentId" class="form-label col-12 col-md-2">Léčba</label>
+					<div class="col">
+						<select asp-for="TreatmentId" class="form-control" asp-items="ViewBag.Treatments">
+							<option value=""></option>
+
+						</select>
+					</div>
+					<div class="col-auto">
+						<button type="submit"
+								formaction="@Url.Action("RedirectToCreateTreatment", "HeadacheRecords")"
+								formmethod="post"
+								formnovalidate
+								class="btn btn-mine-pink">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+							</svg>
+						</button>
+					</div>
+				</div>
+				<hr />
+
+				@*Poznámka*@
+				<div class="row mb-3">
+					<label asp-for="Notes" class="col-form-label col-12 col-md-2">Poznámka</label>
+					<div class="col-12 col-md-10">
+						<textarea asp-for="Notes" class="form-control" rows="4"></textarea>
+					</div>
+				</div>
+				<div class="row">
+					<button type="submit" class="btn btn-mine-primary mt-3">Uložit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
+
+
+

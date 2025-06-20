@@ -1,0 +1,158 @@
+﻿@model IEnumerable<TreatmentDTO>
+
+@{
+	var chartDataTreatments = ViewBag.TreatmentsForChart as IEnumerable<TreatmentDTO>;
+}
+
+<div class="container mt-5">
+
+	<div class="row justify-content-center g-4">
+
+		<div class="col-12 col-md-6 col-xl-4">
+			<a class="btn btn-lg mb-5 p-0 fw-bold btn-mine-secondary-borderless" asp-controller="Home" asp-action="Index">
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+					<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+				</svg>
+			</a>
+			<h2 class="fs-1">Co ti pomáhá?</h2>
+			<h6 class="mb-5 fw-light fs-5">Co ti pomáhá, když je ti nejhůř? Procházka, ticho, meditace nebo třeba pohyb? Vysleduj, na jakého "pomocníka" se můžeš vždy spolehnout.</h6>
+			<div class=" p-3 justify-content-left">
+				<canvas id="treatmentPieChart" height="250px"></canvas>
+			</div>
+		</div>
+		<div class="col-12 col-md-6 col-xl-4 ">
+			<div class="container-mine-transparent-pink-75">
+				<div class="mb-5 text-end">
+					<a class="btn btn-mine-primary mt-3" asp-action="Create">
+						+ Přidat nový
+					</a>
+				</div>
+				@if (TempData["ErrorMessage"] != null)
+				{
+					<div class="alert-mine-orange mb-5" role="alert">
+						@Html.Raw(TempData["ErrorMessage"].ToString().Replace("\n", "<br />"))
+					</div>
+				}
+				@foreach (var item in Model)
+				{
+					<div class="row mb-1">
+						<div class="col">
+							<span class="">@item.Name</span>
+						</div>
+						<div class="col-auto">
+							<a class="btn btn-mine-transparent  mx-1" asp-action="Edit" asp-route-id="@item.Id">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+									 class="bi bi-pencil" viewBox="0 0 16 16">
+									<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+											2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793
+											14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4
+											9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0
+											1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528
+											3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
+											12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0
+											1-.468-.325" />
+								</svg>
+							</a>
+							<form method="post" style="display:inline;">
+								<button type="submit" class="btn btn-mine-transparent" asp-action="Delete" asp-route-id="@item.Id">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+										<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+									</svg>
+								</button>
+							</form>
+						</div>
+
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts {
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
+		$(document).ready(function () {
+			// Získání dat z modelu, které se předávají z C#
+			// var treatmentData = @Html.Raw(Json.Serialize(Model));
+			var treatmentData = @Html.Raw(Json.Serialize(chartDataTreatments));
+
+
+			// Filtrování medikamentů s UsageCount > 0 (s 0 by neměly být v grafu)
+			var filteredData = treatmentData.filter(t => t.usageCount > 0);
+
+			// Pokud nejsou žádná data pro graf, ukončíme skript
+			if (filteredData.length === 0) {
+				console.log("No treatment usage data to display chart.");
+				return;
+			}
+
+			// Příprava dat pro Chart.js
+			var labels = filteredData.map(t => t.name); // Názvy medikamentů
+			var data = filteredData.map(t => t.usageCount); // Počet použití
+
+			function generateRandomColors(numColors) {
+				var colors = [];
+				for (var i = 0; i < numColors; i++) {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					colors.push(`rgba(${r}, ${g}, ${b}, 0.7)`);
+				}
+				return colors;
+			}
+
+		var backgroundColors = labels.map(label => {
+			if (label === "Žádná další léčba") {
+				return "rgba(255, 255, 255, 0.05)";
+			}
+			var hue = Math.floor(Math.random() * 360);
+			var saturation = Math.floor(Math.random() * 30) + 70;
+			var lightness = Math.floor(Math.random() * 20) + 60;
+			return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.7)`;
+		});
+			var ctx = document.getElementById('treatmentPieChart').getContext('2d');
+			var treatmentPieChart = new Chart(ctx, {
+				type: 'pie',
+				data: {
+					labels: labels,
+					datasets: [{
+						label: 'Počet použití',
+						data: data,
+						backgroundColor: backgroundColors,
+						hoverOffset: 4
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+							// position: 'top',
+							// labels: {
+							//     color: '#413B61',
+							//     font: {
+							//         size: 14
+							//     }
+							// }
+						},
+						tooltip: {
+							callbacks: {
+								label: function(context) {
+									let label = ' ';
+									if (label) {
+										label += ': ';
+									}
+									if (context.parsed !== null) {
+										label += context.parsed + 'x';
+									}
+									return label;
+								}
+							}
+						}
+					}
+				}
+			});
+		});
+	</script>
+}

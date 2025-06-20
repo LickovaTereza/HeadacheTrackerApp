@@ -1,0 +1,272 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model HeadacheTracker.ViewModels.HomePageViewModel
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+@*ZOBRAZENÍ PŘED PŘIHLÁŠENÍM*@
+@if (!(User?.Identity?.IsAuthenticated ?? false))
+{
+	<div class="container text-center my-5 ">
+		<div class="row justify-content-center my-5">
+			<div class="col-11 col-lg-7 my-5">
+				<div class="row mt-5">
+					<div class="col">
+						<h1 class="display-1 fw-bold mb-3">Headache Tracker</h1>
+						<h2 class="fs-3 fw-light">Tvůj osobní deník pro pochopení bolestí hlavy.</h2>
+					</div>
+				</div>
+				<div class="row justify-content-center my-5">
+					<a class="btn btn-mine-pink btn-lg mt-4" asp-area="" asp-controller="Home" asp-action="Information">
+						Chci vědět více
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+@*ZOBRAZENÍ PO PŘIHLÁŠENÍ*@
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+	<div class="container mt-5 text-center ">
+
+		<h1 class="display-4 fw-bold ">Ahoj @User.Identity.Name,</h1>
+		<h2 class="fs-3 fw-light mb-5">vítej v aplikaci HeadacheTracker</h2>
+
+		<div class="row justify-content-center">
+			<div class="col-lg-11 col-xl-9">
+				@* POKUD JSI ADMIN/ADMINVIEW *@
+				@if (User.IsInRole("Admin") || User.IsInRole("AdminView"))
+				{
+					<div class="row justify-content-center container-mine-transparent-pink p-4 py-5 mb-4">
+						<div class="col">
+							<div class="row justify-content-between gx-4 gy-3">
+								<div class="col-12 col-sm-6 ">
+									<div class="row mx-1">
+										<a class="btn btn-mine-pink btn-lg my-1" asp-area="" asp-controller="Roles" asp-action="Index">Spravovat role</a>
+									</div>
+								</div>
+								<div class="col-12 col-sm-6 ">
+									<div class="row mx-1">
+										<a class="btn btn-mine-pink btn-lg my-1" asp-area="" asp-controller="Users" asp-action="Index">Spravovat uživatele</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+				@* PRO OSTATNÍ UŽIVATELE *@
+				<div class="row justify-content-center container-mine-transparent-pink p-4 pt-5 pb-4 mb-5">
+					<div class="col">
+						<div class="row justify-content-between gx-4 gy-3 mb-5">
+							<div class="col-12 col-sm-6 ">
+								<div class="row mx-1">
+									<a class="btn btn-mine-primary btn-lg" asp-area="" asp-controller="HeadacheRecords" asp-action="Create">Nový záznam</a>
+								</div>
+							</div>
+							<div class="col-12 col-sm-6 ">
+								<div class="row mx-1">
+									<a class="btn btn-mine-secondary btn-lg" asp-area="" asp-controller="HeadacheRecords" asp-action="Index">Historie záznamů</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="row justify-content-between gx-4 gy-4 pb-2">
+							<div class="col-12 col-lg-4">
+								<div class="row my-4 mx-1">
+									<div class="col container-mine-pink pt-2">
+										@if (Model.DaysWithoutHeadache == -1)
+										{
+											<p class="fs-5 fw-light text-mine-pink">Dní bez bolesti: <span class="display-6 fw-bold">0</span></p>
+										}
+										else if (Model.DaysWithoutHeadache == 0)
+										{
+											<p class="fs-5 fw-light text-mine-pink">Dní bez bolesti: <span class="display-6 fw-bold">0</span></p>
+										}
+										else
+										{
+											<p class="fs-5 fw-light text-mine-pink">Dní bez bolesti: <span class="display-6 fw-bold">@Model.DaysWithoutHeadache</span></p>
+										}
+									</div>
+								</div>
+								<div class="row my-4 mx-1">
+									<div class="col container-mine-transparent-pink">
+										<p class="lead pt-1">Medikamenty užíváš v<br /> <span class="display-6 fw-bold ">@Model.UsagePercentage.ToString("F0") %</span> případů.</p>
+										<canvas class="" id="medicationChart" width="100" height="100"></canvas>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-lg-8 mt-0 mt-lg-4">
+								<div class="row my-4 gx-5 justify-content-between mx-1">
+									<div class="col-12 col-md-6 container-mine-transparent-pink order-2 order-md-1">
+										<h3 class="fs-5">Nejčastější spouštěč:</h3>
+										<h4 class="fs-5 fw-light mb-4">@Model.TopTriggerName</h4>
+										<canvas id="triggerChart" width="100" height="100"></canvas>
+									</div>
+									<div class="col-12 col-md-6 order-1 order-md-2  mb-5 mb-md-0">
+										<div class="row ms-0 ms-md-2 my-4">
+											<a class="btn btn-mine-primary" asp-area="" asp-controller="Triggers" asp-action="Index">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+													 class="bi bi-pencil" viewBox="0 0 16 16">
+													<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+                                            2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793
+                                            14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4
+                                            9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0
+                                            1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528
+                                            3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
+                                            12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0
+                                            1-.468-.325" />
+												</svg> spouštěče
+											</a>
+										</div>
+										<div class="row ms-0 ms-md-2 my-4">
+											<a class="btn btn-mine-primary" asp-area="" asp-controller="Medications" asp-action="Index">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+													 class="bi bi-pencil" viewBox="0 0 16 16">
+													<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+                                            2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793
+                                            14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4
+                                            9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0
+                                            1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528
+                                            3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
+                                            12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0
+                                            1-.468-.325" />
+												</svg> medikamenty
+											</a>
+										</div>
+										<div class="row ms-0 ms-md-2 my-4">
+											<a class="btn btn-mine-primary" asp-area="" asp-controller="Treatments" asp-action="Index">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+													 class="bi bi-pencil" viewBox="0 0 16 16">
+													<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+                                            2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793
+                                            14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4
+                                            9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0
+                                            1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528
+                                            3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
+                                            12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0
+                                            1-.468-.325" />
+												</svg> léčba
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="row my-4 gx-5 mx-2">
+									<a class="btn btn-lg btn-mine-pink" asp-controller="Users" asp-action="Edit" asp-route-id="@UserManager.GetUserId(User)">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+											 class="bi bi-pencil" viewBox="0 0 16 16">
+											<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+                                            2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793
+                                            14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4
+                                            9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0
+                                            1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528
+                                            3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
+                                            12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0
+                                            1-.468-.325" />
+										</svg> spravovat osobní údaje
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@section Scripts {
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
+		$(document).ready(function () {
+			const ctx = document.getElementById('medicationChart').getContext('2d');
+
+			const medicationData = {
+				labels: ['Zadaný medikament', 'Nezadáno'],
+				datasets: [{
+					data: [@Model.MedicationWithUsage, @Model.MedicationWithoutUsage],
+					backgroundColor: ['rgba(241, 145, 109, 0.8)', 'rgba(255, 255, 255, 0.2)' ],
+					borderColor: ['rgba(241, 145, 109, 1)', 'rgba(255, 255, 255, 0.4)'],
+					borderWidth: 1
+				}]
+			};
+
+			new Chart(ctx, {
+				type: 'pie',
+				data: medicationData,
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							display: false
+							// position: 'right'
+						},
+						tooltip: {
+							enabled: false,
+
+							callbacks: {
+								label: function(context) {
+									const label = context.label || '';
+									const value = context.parsed;
+									const total = context.chart._metasets[0].total;
+									const percentage = ((value / total) * 100).toFixed(1);
+									return `${label}: ${value} (${percentage}%)`;
+								}
+							}
+						}
+					}
+				}
+			});
+		});
+	</script>
+	<script>
+		const ctx = document.getElementById('triggerChart').getContext('2d');
+		const triggerChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: {
+				labels: ['@Model.TopTriggerName', 'Ostatní'],
+				datasets: [{
+					label: 'Výskyt',
+					data: [@Model.TopTriggerCount, @Model.OtherTriggersCount],
+					backgroundColor: [
+						'rgba(241, 145, 109, 0.8)', // barva pro Top Trigger
+						'rgba(255, 255, 255, 0.2)'   // barva pro ostatní
+					],
+					borderColor: [
+						'rgba(241, 145, 109, 1)',
+						'rgba(255, 255, 255, 0.4)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				responsive: true,
+				plugins: {
+					legend: {
+						display: false
+
+						// position: 'bottom',
+						// labels: {
+						// 	color: '#413B61'
+						// }
+					},
+					tooltip: {
+						enabled: false,
+						callbacks: {
+							label: function(context) {
+								const label = context.label || '';
+								const value = context.raw || 0;
+								return `${label}: ${value}`;
+							}
+						}
+					}
+				}
+			}
+		});
+	</script>
+}
+
+

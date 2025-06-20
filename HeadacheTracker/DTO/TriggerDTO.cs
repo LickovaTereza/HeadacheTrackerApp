@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations;
+using HeadacheTracker.Models;
+
+namespace HeadacheTracker.DTO {
+    public class TriggerDTO {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "POZOR! Povinný údaj")]
+        [MaxLength(30)]
+        public string Name { get; set; }
+        public string? UserId { get; set; }
+        public int UsageCount { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+    }
+}

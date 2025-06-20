@@ -1,0 +1,88 @@
+﻿@using AspNetCoreMVC_SchoolSystem.Models
+@using (Html.BeginForm("Edit", "Roles", FormMethod.Post))
+
+@model RoleState
+
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-11 col-md-8 col-lg-6 col-xl-4">
+				<a class="btn btn-lg mb-5 p-0 fw-bold btn-mine-secondary-borderless" asp-action="Index">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+						<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+					</svg>
+				</a>
+				<form method="post">
+					@Html.Hidden("RoleName", Model.Role.Name)
+					@Html.Hidden("RoleId", Model.Role.Id)
+
+					<h3 class="fs-4 fw-light mt-4">Uživatelé s rolí <span class="fw-bold">@Model.Role.Name</span></h3>
+					<div class="row container-mine-transparent-pink mb-2 mt-2">
+						<div class="col">
+							@if (Model.Members.Count() == 0)
+						{
+							<div>Žádný uživatel nemá roli @Model.Role.Name</div>
+						}
+						else
+						{
+
+							@foreach (var user in Model.Members)
+							{
+								<div class="row my-2">
+									<div class="col-6 text-start">@user.UserName</div>
+									<div class="col-6">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox"
+												   name="DeleteIds" value="@user.Id" id="del_@user.Id" />
+											<label class="form-check-label" for="del_@user.Id">
+												Odebrat
+											</label>
+										</div>
+									</div>
+								</div>
+							}
+						}
+					</div>
+				</div>
+
+				<h3 class="fs-4 fw-light mt-4">Přidat do role:</h3>
+				<div class="row container-mine-transparent-pink mb-2 mt-2">
+
+					<div class="col">
+						@if (Model.NonMembers.Count() == 0)
+						{
+							<div>Všichni uživatelé mají roli @Model.Role.Name</div>
+						}
+						else
+						{
+							@foreach (var user in Model.NonMembers)
+							{
+								<div class="row my-2">
+									<div class="col-6 text-start text-mine-pink">
+										<span>@user.UserName</span>
+									</div>
+									<div class="col-6">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox"
+												   name="AddIds" value="@user.Id" id="add_@user.Id" />
+											<label class="form-check-label" for="add_@user.Id">
+												Přidat
+											</label>
+										</div>
+									</div>
+								</div>
+							}
+						}
+
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<button @(User.IsInRole("AdminView") ? "disabled" : "") type="submit" class="btn btn-mine-primary">Uložit změny</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+

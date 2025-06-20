@@ -1,0 +1,283 @@
+﻿@model HeadacheTracker.ViewModels.HeadacheRecordsViewModel
+
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-11 col-lg-10 col-xl-8">
+			<a class="btn btn-lg mb-5 p-0 fw-bold btn-mine-secondary-borderless" asp-controller="Home" asp-action="Index">
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+					<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+				</svg>
+			</a>
+			<h2 class="display-5 fw-light mt-2">Historie záznamů</h2>
+			<div class="row p-0 mb-2 align-items-end">
+				<div class="col container-mine-pink accordion-flush p-0 mt-4" id="accordionFilter">
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="btn accordion-button-mine accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+								Filtrovat záznamy
+							</button>
+						</h2>
+						<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFilter">
+							<div class="accordion-body">
+								<form asp-action="Index" method="get">
+									<div class="row align-items-center mb-3">
+										<div class="col-auto">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="filterType" id="filterByDate" value="date" checked>
+												<label class="form-check-label" for="filterByDate">Datum</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="filterType" id="filterByPeriod" value="period">
+												<label class="form-check-label" for="filterByPeriod">Období</label>
+											</div>
+										</div>
+									</div>
+
+									<div id="dateFilterContainer">
+										<div class="row g-3 align-items-end mb-3">
+											<div class="col-auto">
+												<input type="date" class="form-control" id="SpecificDate" name="SpecificDate" value="@Model.Filter.SpecificDate?.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")">
+											</div>
+										</div>
+									</div>
+									@{
+										var today = DateTime.Now.ToString("yyyy-MM-dd");
+									}
+									<div id="periodFilterContainer" style="display: none;">
+										<div class="row g-3 align-items-end mb-3">
+											<div class="col-auto">
+												<div class="row">
+													<div class="col-auto">
+														<input type="date" class="form-control" id="DateFrom" name="DateFrom" value="@Model.Filter.DateFrom?.ToString("yyyy-MM-dd")" max="@today">
+
+													</div>
+												</div>
+											</div>
+											<div class="col-auto">
+												<div class="row">
+													<div class="col-auto">
+														<label for="DateTo" class="form-label">-</label>
+
+													</div>
+												</div>
+											</div>
+											<div class="col-auto">
+												<div class="row">
+
+													<div class="col-auto">
+														<input type="date" class="form-control" id="DateTo" name="DateTo" value="@Model.Filter.DateTo?.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row mt-4">
+										<div class="col-12">
+											<button type="submit" class="btn btn-mine-primary me-2">Filtrovat</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				@* Podmíněné zobrazení tlačítka "Zrušit filtr" *@
+				@if (Model.Filter.SpecificDate.HasValue ||
+									Model.Filter.DateFrom.HasValue ||
+									Model.Filter.DateTo.HasValue)
+				{
+					<div class="col-12 text-end col-sm-auto">
+						<a asp-action="Index" class="btn btn-mine-secondary mt-2">Zrušit filtr</a>
+					</div>
+				}
+
+			</div>
+			<div class="row justify-content-center">
+				@if (!Model.Records.Any())
+				{
+					<div class="col alert-mine-orange mt-2" role="alert">
+						Žádné záznamy
+					</div>
+				}
+			</div>
+
+			@* VÝPIS ZÁZNAMŮ *@
+			@foreach (var record in Model.Records)
+			{
+				<div class="row container-mine-transparent-pink mb-2 ">
+					<div class="col">
+						<div class="row">
+							<div class="col-6 fs-5">@record.Date?.ToShortDateString()</div>
+							<div class="col text-end">
+								@* POZNÁMKA *@
+								@if (!string.IsNullOrWhiteSpace(record.Notes))
+								{
+									<span tabindex="0" class="d-inline-block"
+										  data-bs-toggle="popover"
+										  data-bs-trigger="focus"
+										  data-bs-placement="top"
+										  data-bs-content="@record.Notes">
+										<div class="btn btn-mine-transparent">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+												<path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2" />
+												<path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0" />
+											</svg>
+										</div>
+									</span>
+								}
+								@* EDIT *@
+								<a class="btn btn-mine-transparent" asp-action="Edit" asp-route-id="@record.Id">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										 class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+                                            2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793
+                                            14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4
+                                            9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0
+                                            1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528
+                                            3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
+                                            12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0
+                                            1-.468-.325" />
+									</svg>
+								</a>
+								@* DELETE *@
+								<form asp-action="Delete" asp-route-id="@record.Id" method="post" style="display:inline;">
+									<button type="submit" class="btn btn-sm fw-bold btn-mine-transparent" onclick="return confirm('Opravdu chceš záznam trvale vymazat?')">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+											<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+										</svg>
+									</button>
+								</form>
+							</div>
+						</div>
+						<hr />
+						<div class="row">
+							<div class="col-12 col-lg-auto mb-1" style="width: 13ch;">
+								@*style pro stejnou délku sloupce*@
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stopwatch  text-mine-orange" viewBox="0 0 16 16">
+									<path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5z" />
+									<path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64l.012-.013.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5M8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3" />
+								</svg> @record.Duration min
+							</div>
+							<div class="col-12 col-lg-auto mb-1">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fire text-mine-orange" viewBox="0 0 16 16">
+									<path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15" />
+								</svg> @record.Intensity
+							</div>
+							<div class="col-12 col-lg text-break mb-1">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill text-mine-orange" viewBox="0 0 16 16">
+									<path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641z" />
+								</svg> @record.TriggerName
+							</div>
+							<div class="col-12 col-lg">
+								<div class="row">
+									<div class="col text-break mb-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-capsule text-mine-orange" viewBox="0 0 16 16">
+											<path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429z" />
+										</svg> @record.MedicationName
+									</div>
+								</div>
+								<div class="row">
+									<div class="col text-break text-left mb-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill text-mine-orange" viewBox="0 0 16 16">
+											<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+										</svg> @record.TreatmentName
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			}
+
+		</div>
+	</div>
+</div>
+@* <div class="container"> *@
+@* 	<div class="row justify-content-center"> *@
+@* 		@if (!Model.Records.Any()) *@
+@* 		{ *@
+@* 			<div class="col-9 alert-mine-orange mt-2" role="alert"> *@
+@* 				Žádné záznamy *@
+@* 			</div> *@
+@* 		} *@
+@* 	</div> *@
+@* </div> *@
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			// Funkce pro zobrazení/skrytí kontejnerů na základě vybraného radio buttonu
+			function toggleDateFilterContainers() {
+				if ($('#filterByDate').is(':checked')) {
+					$('#dateFilterContainer').show();
+					$('#periodFilterContainer').hide();
+				} else {
+					$('#dateFilterContainer').hide();
+					$('#periodFilterContainer').show();
+				}
+			}
+
+			// Nastav počáteční stav při načtení stránky
+			toggleDateFilterContainers();
+
+			// Přidej posluchač událostí pro změnu radio buttonů
+			$('input[name="filterType"]').change(function () {
+				toggleDateFilterContainers();
+			});
+
+			// Logika pro zachování vybraného radio buttonu po odeslání formuláře
+			// Pokud je SpecificDate vyplněno v Model.Filter, zkontroluj radio button "datum"
+		@if (Model.Filter.SpecificDate.HasValue && !Model.Filter.DateFrom.HasValue && !Model.Filter.DateTo.HasValue)
+		{
+			<text>
+																													$('#filterByDate').prop('checked', true);
+																													toggleDateFilterContainers();
+			</text>
+		}
+		// Jinak (pokud jsou DateFrom/DateTo vyplněny, nebo nic není vyplněno), zkontroluj radio button "období"
+		else if (Model.Filter.DateFrom.HasValue || Model.Filter.DateTo.HasValue)
+		{
+			<text>
+																													$('#filterByPeriod').prop('checked', true);
+																													toggleDateFilterContainers();
+			</text>
+		}
+		// Pokud není žádný filtr, nech defaultní "Konkrétního data"
+		else
+		{
+			<text>
+																													$('#filterByDate').prop('checked', true);
+																													toggleDateFilterContainers();
+			</text>
+		}
+
+
+		});
+	</script>
+
+	<script>
+		const dateFromInput = document.getElementById("DateFrom");
+		const dateToInput = document.getElementById("DateTo");
+
+		function updateConstraints() {
+			// Nastaví min pro DateTo podle DateFrom
+			if (dateFromInput.value)
+				dateToInput.min = dateFromInput.value;
+
+			// Nastaví max pro DateFrom podle DateTo a dnešního dne
+			if (dateToInput.value)
+				dateFromInput.max = dateToInput.value;
+		}
+
+		dateFromInput.addEventListener("change", updateConstraints);
+		dateToInput.addEventListener("change", updateConstraints);
+
+		// Spustí při načtení stránky
+		updateConstraints();
+	</script>
+
+}

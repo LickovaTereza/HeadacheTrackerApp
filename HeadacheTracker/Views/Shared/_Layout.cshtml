@@ -1,0 +1,79 @@
+﻿@{
+	var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+	var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+	var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+	@* <meta name="viewport" content="width=device-width, initial-scale=1.0" /> *@
+	<title>Headache Tracker</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/HeadacheTracker.styles.css" asp-append-version="true" />
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand navbar-toggleable-sm box-shadow mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand d-none d-sm-block" asp-area="" asp-controller="Home" asp-action="Index">Headache Tracker</a>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							@if (User?.Identity?.IsAuthenticated ?? false)
+							{
+								<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Information">
+									O aplikaci
+								</a>
+							}
+						</li>
+					</ul>
+				</div>
+
+				@if (!isAuthenticated && !(currentController == "Home" && currentAction == "Information"))
+				{
+					<a class="btn btn-mine-primary mb-1 mx-3" asp-area="" asp-controller="Account" asp-action="Login">Přihlásit se</a>
+					<a class="btn btn-mine-secondary mb-1" asp-area="" asp-controller="Users" asp-action="Create">Registrovat se</a>
+				}
+
+				@if (User?.Identity?.IsAuthenticated ?? false)
+				{
+					<p class="d-none d-sm-block m-1">Uživatel: @User.Identity.Name</p>
+					<a class="btn btn-mine-primary mb-1 mx-3" asp-area="" asp-controller="Account" asp-action="Logout">Odhlásit</a>
+				}
+			</div>
+		</nav>
+	</header>
+	<div class="container-fluid">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	@* <footer class="border-top footer text-muted text-center"> *@
+	@* 	<div class="container"> *@
+	@* 		&copy; 2025 - HeadacheTracker - <a  class="text-secondary" asp-area="" asp-controller="Home" asp-action="Information">Info</a> *@
+	@* 	</div> *@
+	@* </footer> *@
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+			var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+				return new bootstrap.Popover(popoverTriggerEl);
+			});
+		});
+	</script>
+
+
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

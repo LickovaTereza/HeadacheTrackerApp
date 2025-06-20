@@ -1,0 +1,128 @@
+﻿@model TriggerDTO
+
+@{
+	string returnUrl = ViewBag.ReturnUrl as string;
+}
+
+@if (!string.IsNullOrEmpty(returnUrl) && returnUrl.Contains("HeadacheRecords/Create"))
+{
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-10 col-md-8 col-lg-6 col-xl-4 mt-5">
+				<h2 class="display-6 fw-light mt-2">Nový spouštěč</h2>
+				<div class="container-mine-transparent-pink">
+					<div class="row justify-content-end">
+						<div class="col-auto">
+							<a class="btn btn-lg btn-mine-transparent p-0 m-0" asp-controller="HeadacheRecords" asp-action="Create">
+								<svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+									<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+								</svg>
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<form asp-action="Create" method="post">
+							<input type="hidden" name="returnUrl" value="@Context.Request.Query["returnUrl"]" />
+
+							<div class="form-group">
+								<label asp-for="Name" class="form-label">Název</label>
+								<input asp-for="Name" class="form-control" />
+								<span asp-validation-for="Name" class="text-warning"></span>
+							</div>
+
+							<div class="mt-3">
+								<input class="btn btn-mine-primary" type="submit" value="+ Přidat" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+else if (!string.IsNullOrEmpty(returnUrl) && returnUrl.Contains("HeadacheRecords/Edit"))
+{
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-10 col-md-8 col-lg-6 col-xl-4 mt-5">
+				<h2 class="display-6 fw-light mt-2">Nový spouštěč</h2>
+				<div class="container-mine-transparent-pink">
+					<div class="row justify-content-end">
+						<div class="col-auto">
+							<a class="btn btn-lg btn-mine-transparent p-0 m-0" asp-controller="HeadacheRecords" asp-action="Edit">
+								<svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+									<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+								</svg>
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<form asp-action="Create" method="post">
+							<input type="hidden" name="returnUrl" value="@Context.Request.Query["returnUrl"]" />
+
+							<div class="form-group">
+								<label asp-for="Name" class="form-label">Název</label>
+								<input asp-for="Name" class="form-control" />
+								<span asp-validation-for="Name" class="text-warning"></span>
+							</div>
+
+							<div class="mt-3">
+								<input class="btn btn-mine-primary" type="submit" value="+ Přidat" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+	<div class="container mt-5">
+		<div class="row justify-content-center g-4">
+			<div class="col-12 col-md-6 col-xl-4 ">
+				<a class="btn btn-lg mb-5 p-0 fw-bold btn-mine-secondary-borderless" asp-controller="Home" asp-action="Index">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+						<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+					</svg>
+				</a>
+				<h2 class="fs-1">Tvoje spouštěče</h2>
+				<h6 class="mb-5 fw-light fs-5">Odhalit své spouštěče může být klíčové. Díky jejich identifikaci můžeš bolestem hlavy předcházet.</h6>
+			</div>
+			<div class="col-12 col-md-6 col-xl-4 ">
+				<div class="container-mine-transparent-pink">
+					<div class="row justify-content-end">
+						<div class="col-auto">
+							<a class="btn btn-lg btn-mine-transparent p-0 m-0" asp-controller="Triggers" asp-action="Index">
+								<svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+									<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+								</svg>
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<form asp-action="Create" method="post">
+							<input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+							<div class="form-group">
+								<label asp-for="Name" class="form-label">Název</label>
+								<input asp-for="Name" class="form-control" />
+								<span asp-validation-for="Name" class="text-warning"></span>
+							</div>
+
+							<div class="mt-3">
+								<input class="btn btn-mine-primary" type="submit" value="+ Přidat" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}
